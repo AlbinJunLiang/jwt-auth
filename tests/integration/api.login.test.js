@@ -15,6 +15,7 @@ describe('register->login validation test', () => {
 
     beforeAll(async () => {
     });
+
     beforeEach(async () => {
         try {
             // 1. Apagamos los guardianes (Checks)
@@ -34,6 +35,7 @@ describe('register->login validation test', () => {
             await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
         }
     });
+
     afterAll(async () => {
         await sequelize.close();
     });
@@ -42,7 +44,7 @@ describe('register->login validation test', () => {
             .post('/api/v1/auth/register')
             .send({
                 name: 'Test',
-                email: 'test@testing.com',
+                email: 'test@testing2.com',
                 password: '12345678',
             });
         expect(registerRes.status).toBe(201);
@@ -51,7 +53,7 @@ describe('register->login validation test', () => {
         const loginRes = await request(app)
             .post('/api/v1/auth/login')
             .send({
-                email: 'test@testing.com',
+                email: 'test@testing2.com',
                 password: '12345678',
             });
 

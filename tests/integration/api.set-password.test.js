@@ -10,7 +10,7 @@ jest.mock('nodemailer', () => ({
     }),
 }));
 
-describe('register->login validation test', () => {
+describe('register->login->change password validation test', () => {
 
 
     beforeAll(async () => {
@@ -39,12 +39,12 @@ describe('register->login validation test', () => {
     afterAll(async () => {
         await sequelize.close();
     });
-    test('register->login  (INTEGRATION)', async () => {
+    test('register->login->change password  (INTEGRATION)', async () => {
         const registerRes = await request(app)
             .post('/api/v1/auth/register')
             .send({
                 name: 'Test',
-                email: 'test@testing2.com',
+                email: 'test@testing4.com',
                 password: '12345678',
             });
         expect(registerRes.status).toBe(201);
@@ -53,11 +53,27 @@ describe('register->login validation test', () => {
         const loginRes = await request(app)
             .post('/api/v1/auth/login')
             .send({
-                email: 'test@testing2.com',
+                email: 'test@testing4.com',
                 password: '12345678',
             });
 
         expect(loginRes.status).toBe(200);
         expect(loginRes.body).toHaveProperty('accessToken');
+
+
+
+
+        const resetRes = await request(app)
+            .put('/api/v1/auth')
+            .set('authorization', `Bearer ${loginRes.body.accessToken}`)
+
+            .send({
+                email: 'test@testing4.com',
+                password: '12345678',
+                newPassword: '12345678NEW',
+            });
+
+        expect(resetRes.status).toBe(200);
+        expect(resetRes.body.message).toBe("Usuario actualizado correctamente");
     });
 });
