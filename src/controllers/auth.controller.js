@@ -4,8 +4,7 @@ export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const { accessToken, refreshToken, user
-            , refreshTokenExpiresTime } = await loginService({
+        const { accessToken, refreshToken, user, refreshTokenExpiresTime } = await loginService({
             email,
             password,
             ip: req.ip,
